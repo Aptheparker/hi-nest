@@ -8,11 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-<<<<<<< HEAD
 import { MoviesService } from './movies.service';
 import { Movie } from './entities/movie.entity';
-=======
->>>>>>> 1525b1b3c8d192c9f2488b729cb16dfdb9a99fac
 
 @Controller('movies')
 export class MoviesController {
@@ -36,11 +33,7 @@ export class MoviesController {
 
   @Post()
   create(@Body() movieData) {
-<<<<<<< HEAD
     return this.moviesService.create(movieData);
-=======
-    return movieData;
->>>>>>> 1525b1b3c8d192c9f2488b729cb16dfdb9a99fac
   }
 
   @Delete('/:id')
