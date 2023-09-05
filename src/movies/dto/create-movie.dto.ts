@@ -9,5 +9,5 @@ export class CreateMovieDto {
 
   @IsOptional()
   @IsString({ each: true })
-  readonly genre: string[];
+  readonly genres: string[];
 }
