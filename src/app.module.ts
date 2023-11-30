@@ -3,9 +3,10 @@ import { MoviesModule } from './movies/movies.module';
 import { AppController } from './app.controller';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MyKafkaModule } from './kafka.module';
 
 @Module({
-  // decorator
   imports: [
     I18nModule.forRoot({
       fallbackLanguage: 'en',
@@ -19,6 +20,7 @@ import * as path from 'path';
       ],
     }),
     MoviesModule,
+    MyKafkaModule
   ],
   controllers: [AppController],
   providers: [],
