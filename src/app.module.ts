@@ -3,11 +3,13 @@ import { MoviesModule } from './movies/movies.module';
 import { AppController } from './app.controller';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { MyKafkaModule } from './kafka.module';
+import { KafkaModule } from './kafka/kafka.module';
+import { KafkaController } from './kafka/kafka.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
+    //TODO: WebSocket
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
@@ -20,9 +22,9 @@ import { MyKafkaModule } from './kafka.module';
       ],
     }),
     MoviesModule,
-    MyKafkaModule
+    KafkaModule,
   ],
-  controllers: [AppController],
-  providers: [],
+  controllers: [AppController, KafkaController],
+  providers: [AppService],
 })
 export class AppModule {}

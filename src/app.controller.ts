@@ -1,32 +1,23 @@
 import { Controller, Get } from '@nestjs/common';
-import { JsonSocket, MessagePattern, Payload } from '@nestjs/microservices';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { KafkaProducer } from './kafka/client/kafka-producer';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
+  private readonly kafkaProducer = new KafkaProducer();
+
+  constructor(private readonly appService: AppService) {}
+
+  @Get('/i18n')
+  i18n(@I18n() i18n: I18nContext) {
+    const greetMessage = 'greet';
+    return i18n.t(`test.${greetMessage}`, { lang: 'zh' });
+  }
+
   @Get()
-  home() {
-    return 'My API HomePage';
-  }
-
-  @Get('/test')
-  test(@I18n() i18n: I18nContext) {
-    return i18n.t('test.greet')
-  }
-
-  @Get('/test2')
-  test2(@I18n() i18n: I18nContext) {
-    const greetMessage = "greet"
-    return i18n.t(`test.${greetMessage}`, { lang: 'zh' })
-  }
-
-  @MessagePattern('hello')
-  helloKafka(@Payload() payload) {
-    console.log(JSON.stringify(payload));
-  }
-
-  @MessagePattern('bye')
-  byeKafka(@Payload() payload) {
-    console.log(JSON.stringify(payload));
+  getHello(): string {
+    this.kafkaProducer.send('test', 'test message');
+    return this.appService.getHello();
   }
 }
