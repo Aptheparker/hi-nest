@@ -4,9 +4,8 @@ import { AppController } from './app.controller';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'path';
 import { KafkaModule } from './kafka/kafka.module';
-import { KafkaController } from './kafka/kafka.controller';
 import { AppService } from './app.service';
-
+import { WebSocketModule } from './websocket/websocket.module';
 @Module({
   imports: [
     //TODO: WebSocket
@@ -23,8 +22,9 @@ import { AppService } from './app.service';
     }),
     MoviesModule,
     KafkaModule,
+    WebSocketModule
   ],
-  controllers: [AppController, KafkaController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
