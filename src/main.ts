@@ -2,9 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
-
 async function bootstrap() {
-  // App Server
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
@@ -14,6 +12,6 @@ async function bootstrap() {
     }),
   );
   await app.listen(3000);
-  console.log('App Server is listening');
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
