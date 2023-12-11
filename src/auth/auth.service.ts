@@ -9,17 +9,39 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signIn(username, pass) {
+  async validateUser(username, pass) {
     const user = await this.usersService.findOne(username);
 
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }
 
+    return user;
+  }
+
+  async generateAccessToken(user) {
     const payload = { sub: user.userId, username: user.username };
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    return this.jwtService.signAsync(payload);
+  }
+
+  async generateRefreshToken(user) {
+    const payload = { sub: user.userId, username: user.username };
+
+    return this.jwtService.signAsync(payload);
+  }
+
+  async refresh(refreshTokenDto): Promise<{ accessToken: string }> {
+    const { refresh_token } = refreshTokenDto;
+    const decodedRefreshToken = this.jwtService.verify(refresh_token, { secret: process.env.JWT_REFRESH_SECRET });
+    const userId = decodedRefreshToken.sub;
+    const user = await this.usersService.findByUserId(userId);
+    if (!user) {
+      throw new UnauthorizedException('Invalid user!');
+    }
+
+    const accessToken = await this.generateAccessToken(user);
+
+    return {accessToken};
   }
 }
