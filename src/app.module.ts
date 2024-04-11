@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  ExecutionContext,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -6,6 +11,7 @@ import { LoggerMiddleware } from './logger.middleware';
 import { AuthController } from './auth/auth.controller';
 import { UsersModule } from './users/users.module';
 import { ClsModule } from 'nestjs-cls';
+import { v4 as uuid } from 'uuid';
 
 @Module({
   imports: [
@@ -14,6 +20,8 @@ import { ClsModule } from 'nestjs-cls';
       interceptor: {
         mount: true,
         generateId: true,
+        idGenerator: (context: ExecutionContext) =>
+          context.switchToHttp().getRequest().headers['x-request-id'] ?? uuid(),
       },
     }),
     AuthModule,
