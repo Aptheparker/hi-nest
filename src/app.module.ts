@@ -1,9 +1,7 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { LoggerMiddleware } from './logger.middleware';
-import { AuthController } from './auth/auth.controller';
 import { UsersModule } from './users/users.module';
 import { ClsModule } from 'nestjs-cls';
 
@@ -13,7 +11,6 @@ import { ClsModule } from 'nestjs-cls';
       global: true,
       interceptor: {
         mount: true,
-        generateId: true,
       },
     }),
     AuthModule,
@@ -22,8 +19,4 @@ import { ClsModule } from 'nestjs-cls';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes(AuthController);
-  }
-}
+export class AppModule {}
