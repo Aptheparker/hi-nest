@@ -1,6 +1,6 @@
 import { Controller, Get, UseInterceptors } from '@nestjs/common';
-import { LoggerInterceptor } from 'src/interceptors/logger.interceptor';
-import { LoggerService } from 'src/services/logger.service';
+import { LoggerInterceptor } from 'src/common/interceptors/logger.interceptor';
+import { LoggerService } from 'src/common/services/logger.service';
 
 @Controller('users')
 @UseInterceptors(LoggerInterceptor)

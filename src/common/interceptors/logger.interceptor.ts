@@ -7,17 +7,21 @@ import {
 import { randomUUID } from 'crypto';
 import { ClsService } from 'nestjs-cls';
 import { Observable, tap } from 'rxjs';
+import { LoggerService } from '../services/logger.service';
 
 @Injectable()
 export class LoggerInterceptor implements NestInterceptor {
-  constructor(private clsService: ClsService) {}
+  constructor(
+    private clsService: ClsService,
+    private loggerService: LoggerService,
+  ) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const id = randomUUID();
     this.clsService.set('id', id);
-    console.log(`<${id}> Request`);
+    this.loggerService.log('Request log');
     return next.handle().pipe(
       tap(() => {
-        console.log(`<${id}> Response`);
+        this.loggerService.log('Response log');
       }),
     );
   }
